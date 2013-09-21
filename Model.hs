@@ -2,6 +2,7 @@ module Model where
 
 import Prelude
 import Yesod
+import Yesod.Auth.HashDB (HashDBUser(..))
 import Data.Text (Text)
 import Database.Persist.Quasi
 import Data.Typeable (Typeable)
@@ -12,3 +13,11 @@ import Data.Typeable (Typeable)
 -- http://www.yesodweb.com/book/persistent/
 share [mkPersist sqlOnlySettings, mkMigrate "migrateAll"]
     $(persistFileWith lowerCaseSettings "config/models")
+
+instance HashDBUser User where
+  userPasswordHash = Just . userPassword
+  userPasswordSalt = Just . userSalt
+  setSaltAndPasswordHash s h p = p { userSalt = s
+                                  , userPassword = h
+                                  }
+

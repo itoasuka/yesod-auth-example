@@ -1,6 +1,7 @@
 User
     ident Text
-    password Text Maybe
+    password Text
+    salt Text
     UniqueUser ident
     deriving Typeable
 Email
